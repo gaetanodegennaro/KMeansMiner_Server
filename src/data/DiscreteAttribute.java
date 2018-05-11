@@ -24,7 +24,6 @@ public class DiscreteAttribute extends Attribute implements Iterable<String>
     	for(int i=0;i<data.getNumberOfExamples();i++)
     	{
     		if(idList.contains(i) && data.getAttributeValue(i, this.getIndex()).equals(v)) occurrences++;
-    		//if(idList.get(i) && data.getAttributeValue(i, this.getIndex()).equals(v)) occurrences++;
     	}
     	return occurrences;
     }

@@ -79,11 +79,9 @@ public class Cluster
 			str+="[";
 			for(int j=0;j<data.getNumberOfExplanatoryAttributes();j++) str+=data.getAttributeValue(array[i], j)+" ";
 			str+="] dist="+getCentroid().getDistance(data.getItemSet(array[i]))+"\n";
-			
 		}
 		str+="AvgDistance="+getCentroid().avgDistance(data, array)+"\n\n";
 		return str;
-		
 	}
 
 }

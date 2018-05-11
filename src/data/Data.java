@@ -85,20 +85,20 @@ public class Data
     	ex12.add(new String("Overcast"));
     	ex13.add(new String("Rain"));
     	
-    	ex0.add(new String ("Hot"));
-    	ex1.add(new String ("Hot"));
-    	ex2.add(new String("Hot"));
-    	ex3.add(new String("Mild"));
-    	ex4.add(new String("Cool"));
-    	ex5.add(new String("Cool"));
-    	ex6.add(new String("Cool"));
-    	ex7.add(new String("Mild"));
-    	ex8.add(new String("Cool"));
-    	ex9.add(new String("Mild"));
-    	ex10.add(new String("Mild"));
-    	ex11.add(new String("Mild"));
-    	ex12.add(new String("Hot"));
-    	ex13.add(new String("Mild"));
+    	ex0.add(new Double(37.5));
+    	ex1.add(new Double(38.7));
+    	ex2.add(new Double(37.5));
+    	ex3.add(new Double(20.05));
+    	ex4.add(new Double(20.07));
+    	ex5.add(new Double(21.2));
+    	ex6.add(new Double(21.2));
+    	ex7.add(new Double(20.05));
+    	ex8.add(new Double(21.2));
+    	ex9.add(new Double(19.8));
+    	ex10.add(new Double(3.5));
+    	ex11.add(new Double(3.6));
+    	ex12.add(new Double(3.5));
+    	ex13.add(new Double(3.2));
     	
     	ex0.add(new String ("High"));
     	ex1.add(new String ("High"));
@@ -177,7 +177,7 @@ public class Data
         temperatureValues.add("Cool");
         temperatureValues.add("Hot");
         temperatureValues.add("Mild");
-        explanatorySet.add(new DiscreteAttribute("Temperature",1, temperatureValues));
+        explanatorySet.add(new ContinuousAttribute("Temperature",1, 3.2, 38.7));
         
         TreeSet<String> humidityValues = new TreeSet<String>();
         humidityValues.add("High");
@@ -236,7 +236,12 @@ public class Data
     {
     	Tuple tuple = new Tuple(explanatorySet.size());
     	Example e = data.get(index);
-    	for(Attribute a : explanatorySet) tuple.add(new DiscreteItem(a, (String)e.get(a.getIndex())), a.getIndex());
+    	
+    	for(Attribute a : explanatorySet)
+		{
+    		if(a instanceof DiscreteAttribute) tuple.add(new DiscreteItem((DiscreteAttribute) a, (String) e.get(a.getIndex())), a.getIndex());
+    		else tuple.add(new ContinuousItem((ContinuousAttribute) a, (Double) e.get(a.getIndex())), a.getIndex());
+		}
     	//for(int i=0;i<explanatorySet.size();i++) tuple.add(new DiscreteItem(explanatorySet.get(i), (String)data.get(index).get(i)),i);
     	return tuple;
     }
@@ -284,15 +289,36 @@ public class Data
 	
 	Object computePrototype(Set<Integer> idList, Attribute attribute)
 	{
-		return computePrototype(idList, (DiscreteAttribute) attribute);
+		if(attribute instanceof DiscreteAttribute) return computePrototype(idList, (DiscreteAttribute) attribute);
+		else return computePrototype(idList, (ContinuousAttribute) attribute);
 	}
 	
-	String computePrototype(Set<Integer> idList, DiscreteAttribute attribute)
+	/*  Determina il valore prototipo come media dei valori osservati per attribute nelle transazioni di data
+	 *  aventi indice di riga in idList
+	 */
+	private double computePrototype(Set<Integer> idList, ContinuousAttribute attribute)
+	{
+		double media=0;
+		int count=0;
+		int i=0;
+		for(Object o : data)
+		{
+			if(idList.contains(i))
+			{
+				media+=(double) ((Example) o).get(attribute.getIndex());
+				count++;
+			}
+			i++;
+		}
+		return media/count;
+	}
+	
+	private String computePrototype(Set<Integer> idList, DiscreteAttribute attribute)
 	{
 		int maxFrequency = -1;
 		Object maxFrequencyAttribute = null;
 		
-		Iterator<String> iterator = attribute.iterator(); /*verificare*/
+		Iterator<String> iterator = attribute.iterator();
 		while(iterator.hasNext())
 		{
 			Object a = iterator.next();
@@ -303,8 +329,6 @@ public class Data
 				maxFrequencyAttribute = a;
 			}
 		}
-		
 		return maxFrequencyAttribute.toString();
 	}
-
 }

@@ -2,7 +2,7 @@ package data;
 
 class DiscreteItem extends Item
 {
-	DiscreteItem(Attribute attribute, Object value)
+	DiscreteItem(DiscreteAttribute attribute, Object value)
 	{
 		super(attribute,value);
 	}
