@@ -1,136 +1,198 @@
 package data;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
-
-import utility.ArraySet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Data
 {
-    // Le visibilità di classi , attributi e metodi devono essere decise dagli studenti	
-    private Object data[][];
+	class Example implements Comparable<Example>
+	{
+		private List<Object> example = new ArrayList<Object>();
+		
+		private void add(Object o)
+		{
+			example.add(o);
+		}
+		
+		private Object get(int i)
+		{
+			return example.get(i);
+		}
+		
+		/*TreeSet tempData utilizza questo metodo per controllare se inserire l'elemento o meno*/
+		public int compareTo(Example ex)
+		{
+			int i=0;
+			for(Object o : example)
+			{
+				if(!o.equals(ex.get(i))) return o.toString().compareTo(ex.get(i).toString());
+				i++;
+			}
+			return 0;
+		}
+		
+		public String toString()
+		{
+			String str = "(";
+			for(Object o: example)
+			{
+				str+=o.toString()+" ";
+			}
+			str+=")";
+			return str;
+		}
+		
+	}
+	
+    private List<Example> data;
     private int numberOfExamples;
-    private int distinctTuples;
-    private Attribute explanatorySet[];
+    private List<Attribute> explanatorySet;
     
     public Data()
     {
-        data = new Object[14][5];
-        explanatorySet = new Attribute[5];
+    	TreeSet<Example> tempData = new TreeSet<Example>();
+    	Example ex0=new Example();
+    	Example ex1=new Example();
+    	Example ex2=new Example();
+    	Example ex3=new Example();
+    	Example ex4=new Example();
+    	Example ex5=new Example();
+    	Example ex6=new Example();
+    	Example ex7=new Example();
+    	Example ex8=new Example();
+    	Example ex9=new Example();
+    	Example ex10=new Example();
+    	Example ex11=new Example();
+    	Example ex12=new Example();
+    	Example ex13=new Example();
+    	
+    	ex0.add(new String ("Sunny"));
+    	ex1.add(new String ("Sunny"));
+    	ex2.add(new String("Overcast"));
+    	ex3.add(new String("Rain"));
+    	ex4.add(new String("Rain"));
+    	ex5.add(new String("Rain"));
+    	ex6.add(new String("Overcast"));
+    	ex7.add(new String("Sunny"));
+    	ex8.add(new String("Sunny"));
+    	ex9.add(new String("Rain"));
+    	ex10.add(new String("Sunny"));
+    	ex11.add(new String("Overcast"));
+    	ex12.add(new String("Overcast"));
+    	ex13.add(new String("Rain"));
+    	
+    	ex0.add(new String ("Hot"));
+    	ex1.add(new String ("Hot"));
+    	ex2.add(new String("Hot"));
+    	ex3.add(new String("Mild"));
+    	ex4.add(new String("Cool"));
+    	ex5.add(new String("Cool"));
+    	ex6.add(new String("Cool"));
+    	ex7.add(new String("Mild"));
+    	ex8.add(new String("Cool"));
+    	ex9.add(new String("Mild"));
+    	ex10.add(new String("Mild"));
+    	ex11.add(new String("Mild"));
+    	ex12.add(new String("Hot"));
+    	ex13.add(new String("Mild"));
+    	
+    	ex0.add(new String ("High"));
+    	ex1.add(new String ("High"));
+    	ex2.add(new String("High"));
+    	ex3.add(new String("High"));
+    	ex4.add(new String("Normal"));
+    	ex5.add(new String("Normal"));
+    	ex6.add(new String("Normal"));
+    	ex7.add(new String("High"));
+    	ex8.add(new String("Normal"));
+    	ex9.add(new String("Normal"));
+    	ex10.add(new String("Normal"));
+    	ex11.add(new String("High"));
+    	ex12.add(new String("Normal"));
+    	ex13.add(new String("High"));
+    	
+    	ex0.add(new String ("Weak"));
+    	ex1.add(new String ("Strong"));
+    	ex2.add(new String("Weak"));
+    	ex3.add(new String("Weak"));
+    	ex4.add(new String("Weak"));
+    	ex5.add(new String("Strong"));
+    	ex6.add(new String("Strong"));
+    	ex7.add(new String("Weak"));
+    	ex8.add(new String("Weak"));
+    	ex9.add(new String("Weak"));
+    	ex10.add(new String("Strong"));
+    	ex11.add(new String("Strong"));
+    	ex12.add(new String("Weak"));
+    	ex13.add(new String("Strong"));
+    	
+    	ex0.add(new String ("No"));
+    	ex1.add(new String ("No"));
+    	ex2.add(new String("Yes"));
+    	ex3.add(new String("Yes"));
+    	ex4.add(new String("Yes"));
+    	ex5.add(new String("No"));
+    	ex6.add(new String("Yes"));
+    	ex7.add(new String("No"));
+    	ex8.add(new String("Yes"));
+    	ex9.add(new String("Yes"));
+    	ex10.add(new String("Yes"));
+    	ex11.add(new String("Yes"));
+    	ex12.add(new String("Yes"));
+    	ex13.add(new String("No"));
+    	
+    	tempData.add(ex0);
+    	tempData.add(ex1);
+    	tempData.add(ex2);
+    	tempData.add(ex3);
+    	tempData.add(ex4);
+    	tempData.add(ex5);
+    	tempData.add(ex6);
+    	tempData.add(ex7);
+    	tempData.add(ex8);
+    	tempData.add(ex9);
+    	tempData.add(ex10);
+    	tempData.add(ex11);
+    	tempData.add(ex12);
+    	tempData.add(ex13);
+    	
+    	data = new ArrayList<Example>(tempData);
+    	// COMPLETARE
+    	 this.numberOfExamples = data.size();
+    	// COMPLETARE
+    	
+        explanatorySet = new LinkedList<Attribute>();
         
-        String outLookValues[]=new String[3];
-        outLookValues[0]="Overcast";
-        outLookValues[1]="Rain";
-        outLookValues[2]="Sunny";
-        explanatorySet[0] = new DiscreteAttribute("Outlook",0, outLookValues);
+        TreeSet<String> outLookValues = new TreeSet<String>();
+        outLookValues.add("Overcast");
+        outLookValues.add("Rain");
+        outLookValues.add("Sunny");
+        explanatorySet.add(new DiscreteAttribute("Outlook",0, outLookValues));
         
-        String temperatureValues[]=new String[3];
-        temperatureValues[0]="Cool";
-        temperatureValues[1]="Hot";
-        temperatureValues[2]="Mild";
-        explanatorySet[1] = new DiscreteAttribute("Temperature",1, temperatureValues);
+        TreeSet<String> temperatureValues = new TreeSet<String>();
+        temperatureValues.add("Cool");
+        temperatureValues.add("Hot");
+        temperatureValues.add("Mild");
+        explanatorySet.add(new DiscreteAttribute("Temperature",1, temperatureValues));
         
-        String humidityValues[]=new String[2];
-        humidityValues[0]="High";
-        humidityValues[1]="Normal";
-        explanatorySet[2] = new DiscreteAttribute("Humidity",2, humidityValues);
+        TreeSet<String> humidityValues = new TreeSet<String>();
+        humidityValues.add("High");
+        humidityValues.add("Normal");
+        explanatorySet.add(new DiscreteAttribute("Humidity",2, humidityValues));
         
-        String windValues[]=new String[2];
-        windValues[0]="Strong";
-        windValues[1]="Weak";
-        explanatorySet[3] = new DiscreteAttribute("Wind",3, windValues);
+        TreeSet<String> windValues = new TreeSet<String>();
+        windValues.add("Strong");
+        windValues.add("Weak");
+        explanatorySet.add(new DiscreteAttribute("Wind",3, windValues));
         
-        String playTennisValues[]=new String[2];
-        playTennisValues[0]="No";
-        playTennisValues[1]="Yes";
-        explanatorySet[4] = new DiscreteAttribute("Play Tennis",4, playTennisValues);
-        
-        data[0][0] = "Sunny";
-        data[0][1] = "Hot";
-        data[0][2] = "High";
-        data[0][3] = "Weak";
-        data[0][4] = "No";
-        
-        data[1][0] = "Sunny";
-        data[1][1] = "Hot";
-        data[1][2] = "High";
-        data[1][3] = "Strong";
-        data[1][4] = "No";
-        
-        data[2][0] = "Overcast";
-        data[2][1] = "Hot";
-        data[2][2] = "High";
-        data[2][3] = "Weak";
-        data[2][4] = "Yes";
-        
-        data[3][0] = "Rain";
-        data[3][1] = "Mild";
-        data[3][2] = "High";
-        data[3][3] = "Weak";
-        data[3][4] = "Yes";
-        
-        data[4][0] = "Rain";
-        data[4][1] = "Cool";
-        data[4][2] = "Normal";
-        data[4][3] = "Weak";
-        data[4][4] = "Yes";
-        
-        data[5][0] = "Rain";
-        data[5][1] = "Cool";
-        data[5][2] = "Normal";
-        data[5][3] = "Strong";
-        data[5][4] = "No";
-        
-        data[6][0] = "Overcast";
-        data[6][1] = "Cool";
-        data[6][2] = "Normal";
-        data[6][3] = "Strong";
-        data[6][4] = "Yes";
-       
-        data[7][0] = "Sunny";
-        data[7][1] = "Mild";
-        data[7][2] = "High";
-        data[7][3] = "Weak";
-        data[7][4] = "No";
-        
-        data[8][0] = "Sunny";
-        data[8][1] = "Cool";
-        data[8][2] = "Normal";
-        data[8][3] = "Weak";
-        data[8][4] = "Yes";
-        
-        data[9][0] = "Rain";
-        data[9][1] = "Mild";
-        data[9][2] = "Normal";
-        data[9][3] = "Weak";
-        data[9][4] = "Yes";
-        
-        data[10][0] = "Sunny";
-        data[10][1] = "Mild";
-        data[10][2] = "Normal";
-        data[10][3] = "Strong";
-        data[10][4] = "Yes";
-        
-        data[11][0] = "Overcast";
-        data[11][1] = "Mild";
-        data[11][2] = "High";
-        data[11][3] = "Strong";
-        data[11][4] = "Yes";
-        
-        data[12][0] = "Overcast";
-        data[12][1] = "Hot";
-        data[12][2] = "Normal";
-        data[12][3] = "Weak";
-        data[12][4] = "Yes";
-        
-        data[13][0] = "Rain";
-        data[13][1] = "Mild";
-        data[13][2] = "High";
-        data[13][3] = "Strong";
-        data[13][4] = "No";
-        
-        this.numberOfExamples = 14;
-        
-        distinctTuples = countDistinctTuples();
+        TreeSet<String> playTennisValues = new TreeSet<String>();
+        playTennisValues.add("No");
+        playTennisValues.add("Yes");
+        explanatorySet.add(new DiscreteAttribute("Play Tennis",4, playTennisValues));
     }
     
     public int getNumberOfExamples()
@@ -140,44 +202,49 @@ public class Data
     
     public int getNumberOfExplanatoryAttributes()
     {
-        return explanatorySet.length;
+        return explanatorySet.size();
     }
     
-    Attribute[] getAttributeSchema()
+    List<Attribute> getAttributeSchema()
     {
         return explanatorySet;
     }
     
     public Object getAttributeValue(int exampleIndex, int attributeIndex)
     {
-        return data[exampleIndex][attributeIndex];
+        return data.get(exampleIndex).get(attributeIndex);
     }
     
-    @Override
+    
     public String toString()
     {
         String dataString = new String();
-        for(int i=0;i<explanatorySet.length;i++) dataString+=explanatorySet[i].getName()+",";
+        for(Attribute a : explanatorySet) dataString+=a.toString();
         dataString+="\n";
-        for(int i=0;i<numberOfExamples;i++)
+        int i=0;
+        for(Example ex: data)
         {
             dataString+=(i+1)+":";
-            for(int j=0;j<5;j++) dataString+=data[i][j]+",";
+            dataString+=ex.toString();
             dataString+="\n";
+            i++;
         }
         return dataString;
     }
     
     public Tuple getItemSet(int index)
     {
-    	Tuple tuple = new Tuple(explanatorySet.length);
-    	for(int i=0;i<explanatorySet.length;i++) tuple.add(new DiscreteItem(explanatorySet[i], (String)data[index][i]),i);
+    	Tuple tuple = new Tuple(explanatorySet.size());
+    	Example e = data.get(index);
+    	for(Attribute a : explanatorySet) tuple.add(new DiscreteItem(a, (String)e.get(a.getIndex())), a.getIndex());
+    	//for(int i=0;i<explanatorySet.size();i++) tuple.add(new DiscreteItem(explanatorySet.get(i), (String)data.get(index).get(i)),i);
     	return tuple;
     }
     
     public int[] sampling(int k) throws OutOfRangeSampleSize
 	{
-    	if(k<1 || k>distinctTuples) throw new OutOfRangeSampleSize("k number is >"+distinctTuples+" of distinct tuples");
+    	if(k<1) throw new OutOfRangeSampleSize("k number is <1");
+    	else if(k>data.size()) throw new OutOfRangeSampleSize("k number is >"+data.size()+" of distinct tuples");
     	
 		int centroidIndexes[]=new int[k];
 		//choose k random different centroids in data.
@@ -209,54 +276,35 @@ public class Data
 	{
 		if(i<getNumberOfExamples() && j<getNumberOfExamples())
 		{
-			if(Arrays.equals(data[i], data[j])) return true;
+			if(data.get(i).compareTo(data.get(j))==0) return true;
 			else return false;
 		}
 		else return false;
 	}
 	
-	Object computePrototype(ArraySet idList, Attribute attribute)
+	Object computePrototype(Set<Integer> idList, Attribute attribute)
 	{
 		return computePrototype(idList, (DiscreteAttribute) attribute);
 	}
 	
-	String computePrototype(ArraySet idList, DiscreteAttribute attribute)
+	String computePrototype(Set<Integer> idList, DiscreteAttribute attribute)
 	{
 		int maxFrequency = -1;
-		int maxFrequencyIndex = -1;
+		Object maxFrequencyAttribute = null;
 		
-		for(int i=0; i<attribute.getNumberOfDistinctValues();i++)
+		Iterator<String> iterator = attribute.iterator(); /*verificare*/
+		while(iterator.hasNext())
 		{
-			int currentFrequency = attribute.frequency(this, idList, attribute.getValue(i));
+			Object a = iterator.next();
+			int currentFrequency = attribute.frequency(this, idList, a.toString());
 			if(currentFrequency>maxFrequency)
 			{
 				maxFrequency = currentFrequency;
-				maxFrequencyIndex = i;
+				maxFrequencyAttribute = a;
 			}
 		}
 		
-		if(maxFrequencyIndex==-1) return null;
-		else return attribute.getValue(maxFrequencyIndex);
-	}
-	
-	private int countDistinctTuples()
-	{
-		int distinctTuples = 0;
-		for(int i=0; i<this.getNumberOfExamples(); i++)
-		{
-			boolean distinctFound = false;
-			for(int j=0; j<i; j++)
-			{
-				if(i!=j && this.compare(i, j))
-				{
-					distinctFound = true;
-					break;
-				}
-			}
-			if(!distinctFound) distinctTuples++;
-		}
-		
-		return distinctTuples;
+		return maxFrequencyAttribute.toString();
 	}
 
 }

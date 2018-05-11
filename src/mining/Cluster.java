@@ -1,12 +1,16 @@
 package mining;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import data.Data;
 import data.Tuple;
-import utility.ArraySet;
 
 public class Cluster 
 {
 	private Tuple centroid;
-	private ArraySet clusteredData; 
+	private Set<Integer> clusteredData; 
 	
 	/*Cluster(){
 		
@@ -15,8 +19,7 @@ public class Cluster
 	Cluster(Tuple centroid)
 	{
 		this.centroid=centroid;
-		clusteredData=new ArraySet();
-		
+		clusteredData=new HashSet<Integer>();
 	}
 		
 	Tuple getCentroid()
@@ -42,15 +45,15 @@ public class Cluster
 	//verifica se una transazione è clusterizzata nell'array corrente
 	boolean contain(int id)
 	{
-		return clusteredData.get(id);
+		//return clusteredData.get(id);
+		return clusteredData.contains(id);
 	}
 	
 
 	//remove the tuple that has changed the cluster
 	void removeTuple(int id)
 	{
-		clusteredData.delete(id);
-		
+		clusteredData.remove(new Integer(id));
 	}
 	
 	public String toString()
@@ -69,7 +72,8 @@ public class Cluster
 		String str="Centroid=(";
 		for(int i=0;i<centroid.getLength();i++) str+=centroid.get(i)+ " ";
 		str+=")\nExamples:\n";
-		int array[] = clusteredData.toArray();
+		/*VERIFICARE*/
+		int array[] = Arrays.stream(clusteredData.toArray(new Integer[0])).mapToInt(Integer::intValue).toArray();
 		for(int i=0;i<array.length;i++)
 		{
 			str+="[";

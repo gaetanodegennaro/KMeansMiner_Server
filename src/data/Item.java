@@ -1,5 +1,5 @@
 package data;
-import utility.ArraySet;
+import java.util.Set;
 
 public abstract class Item
 {
@@ -29,7 +29,7 @@ public abstract class Item
 	
 	abstract double distance(Object a);
 	
-	public void update(Data data, ArraySet clusteredData)
+	public void update(Data data, Set<Integer> clusteredData)
 	{
 		Object newValue = data.computePrototype(clusteredData, this.attribute);
 		if(newValue!=null) value = newValue;
