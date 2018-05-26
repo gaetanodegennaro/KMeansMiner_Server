@@ -1,8 +1,8 @@
 package data;
 
-class DiscreteItem extends Item
+public class DiscreteItem extends Item
 {
-	DiscreteItem(DiscreteAttribute attribute, Object value)
+	public DiscreteItem(DiscreteAttribute attribute, Object value)
 	{
 		super(attribute,value);
 	}

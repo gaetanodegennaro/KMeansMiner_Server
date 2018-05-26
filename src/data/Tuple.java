@@ -1,9 +1,12 @@
 package data;
-public class Tuple /*RIGA*/
+
+import java.io.Serializable;
+
+public class Tuple implements Serializable
 {
 	private Item[] tuple;
 	
-	Tuple(int size)
+	public Tuple(int size)
 	{
 		tuple = new Item[size];
 	}
@@ -18,7 +21,7 @@ public class Tuple /*RIGA*/
 		return tuple[i];
 	}
 	
-	void add(Item c, int i)
+	public void add(Item c, int i)
 	{
 		tuple[i] = c;
 	}

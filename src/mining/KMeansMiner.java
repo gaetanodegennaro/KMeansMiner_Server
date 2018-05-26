@@ -1,14 +1,36 @@
 package mining;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import data.Data;
 import data.OutOfRangeSampleSize;
 
-public class KMeansMiner
+public class KMeansMiner implements Serializable
 {
 	private ClusterSet C;
 	
 	public KMeansMiner(int k)
 	{
 		C = new ClusterSet(k);
+	}
+	
+	public KMeansMiner(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException
+	{
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+		C = (ClusterSet) in.readObject();
+		in.close();
+	}
+	
+	public void salva(String fileName) throws FileNotFoundException, IOException
+	{
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+		out.writeObject(C);
+		out.close();
 	}
 	
 	public ClusterSet getC()
@@ -48,5 +70,10 @@ public class KMeansMiner
 		while(changedCluster);
 		
 		return numberOfIterations;
+	}
+	
+	public String toString()
+	{
+		return C.toString();
 	}
 }

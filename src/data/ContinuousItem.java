@@ -1,8 +1,8 @@
 package data;
 
-class ContinuousItem extends Item
+public class ContinuousItem extends Item
 {
-	ContinuousItem(ContinuousAttribute attribute, Double value)
+	public ContinuousItem(ContinuousAttribute attribute, Double value)
 	{
 		super(attribute, value);
 	}
