@@ -17,12 +17,48 @@ import database.TableData;
 import database.TableSchema;
 import database.TableSchema.Column;
 
+/**
+ * Modella una lsta di Example, dando vita ad una collezione di dati.
+ * La lista viene popolata con le tuple lette dal database
+ * 
+ * @author de Gennaro Gaetano, Farinola Francesco
+ *
+ */
 public class Data
 {
+	/**
+	 * Lista di Example.
+	 */
     private List<Example> data;
+    
+    /**
+     * Numero di Example presenti in {@link #data}
+     */
     private int numberOfExamples;
+    
+    /**
+     * Lista di Attributi
+     */
     private List<Attribute> explanatorySet;
     
+    /**
+     * Inizializza tutti gli attributi di istanza con le informazioni ottenute dalla lettura del contenuto di table all'interno del database.
+     * Inizializza quindi {@link #data} con le tuple lette<br>
+     * {@link #numberOfExamples} con la lunghezza di {@link #data}
+     * Ed {@link #explanatorySet} con le informazioni ottenute da {@link TableSchema}
+     * 
+     * @param table Nome della tabella dalla quale leggere il contenuto.
+     * @throws EmptySetException Sollevata nel caso in cui la tabella dalla quale si intende leggere le tuple è vuota
+     * @throws DatabaseConnectionException Sollevata nel caso in cui la connessione con il database fallisce
+     * @throws SQLException Sollevata nel caso in cui si verificano problemi con la connessione al database
+     * @throws NoValueException Sollevata se la funzione di aggregazione {@link TableData#getAggregateColumnValue(String, Column, QUERY_TYPE)} 
+     * non produce alcun risultato a causa di mancanza di tuple nel database.
+     * 
+     * @see EmptySetException
+     * @see DatabaseConnectionException
+     * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/sql/SQLException.html">SQLException</a>
+     * @see NoValueException
+     */
     public Data(String table) throws EmptySetException, DatabaseConnectionException, SQLException, NoValueException
     {
     	DbAccess db = new DbAccess();
@@ -58,44 +94,53 @@ public class Data
 		db.getConnection().close();
     }
    
-    
+    /**
+     * Restituisce il numero di Example in {@link #data}
+     * @return Restituisce la lunghezza di {@link #data}
+     */
     public int getNumberOfExamples()
     {
         return numberOfExamples;
     }
     
+    /**
+     * Restituisce il numero di Attribute in {@link #explanatorySet}
+     * @return Restituisce la lunghezza di {@link #explanatorySet}
+     */
     public int getNumberOfExplanatoryAttributes()
     {
         return explanatorySet.size();
     }
     
+    /**
+     * Restituisce {@link #explanatorySet}
+     * @return Restituisce {@link #explanatorySet}
+     */
     List<Attribute> getAttributeSchema()
     {
         return explanatorySet;
     }
     
+    /**
+     * Restituisce il valore dell'attributo identidificato da attributeIndex di Example in {@link #data} in posizione exampleIndex.
+     * @param exampleIndex Indice dell'Example in {@link #data}
+     * @param attributeIndex Indice dell'attributo in Example.
+     * 
+     * @return L'oggetto in {@link #data} in posizione exampleIndex con attributo con indice attributeIndex
+     */
     public Object getAttributeValue(int exampleIndex, int attributeIndex)
     {
         return data.get(exampleIndex).get(attributeIndex);
     }
     
     
-    public String toString()
-    {
-        String dataString = new String();
-        for(Attribute a : explanatorySet) dataString+=a.toString()+" ";
-        dataString+="\n";
-        int i=0;
-        for(Example ex: data)
-        {
-            dataString+=(i+1)+": ";
-            dataString+=ex.toString();
-            dataString+="\n";
-            i++;
-        }
-        return dataString;
-    }
-    
+    /**
+     * Restituisce il riferimento ad un'istanza di {@link Tuple} composto da tutti gli attributi di un Example in posizione index in {@link #data}
+     * 
+     * @param index Indice di Example in {@link #data}
+     * 
+     * @return Restituisce una Tuple composta da tutti gli Item presenti nell'Example con indice index in {@link #data}
+     */
     public Tuple getItemSet(int index)
     {
     	Tuple tuple = new Tuple(explanatorySet.size());
@@ -110,6 +155,14 @@ public class Data
     	return tuple;
     }
     
+    /**
+     * Inizializza i centroidi con delle tuple di {@link #data} in maniera casuale.
+     * 
+     * @param k Numero di Cluster
+     * @return Array di interi contenente gli indici dei centroidi appena trovati
+     * @throws OutOfRangeSampleSize Sollevata se il numero k di cluster passato per parametro è minore di 1 o maggiore di {@link #numberOfExamples}
+     * @see OutOfRangeSampleSize
+     */
     public int[] sampling(int k) throws OutOfRangeSampleSize
 	{
     	if(k<1) throw new OutOfRangeSampleSize("k number is <1");
@@ -141,6 +194,15 @@ public class Data
 		return centroidIndexes;
 	}
 	
+    /**
+     * Confronta due Example in {@link #data}, identificati dagli indici i e j passati come parametro.
+     * Il confronto è effettuato sfruttando il metodo {@link Example#compareTo(Example)}
+     * 
+     * @param i Indice del primo Example in {@link #data}
+     * @param j Indice del secondo Example in {@link #data}
+     * 
+     * @return true se i due Example sono uguali, false altrimenti.
+     */
 	private boolean compare(int i, int j)
 	{
 		if(i<getNumberOfExamples() && j<getNumberOfExamples())
@@ -151,14 +213,28 @@ public class Data
 		else return false;
 	}
 	
+	/**
+	 * Invoca {@link Data#computePrototype(Set, ContinuousAttribute)} o {@link #computePrototype(Set, DiscreteAttribute)}
+	 * a seconda se attribute sia di tipo {@link ContinuousAttribute} o {@link DiscreteAttribute}.
+	 * 
+	 * @param idList Insieme di interi contenenti degli indici di riga degli Example di {@link #data}
+	 * @param attribute Attributo sul quale effettuare il controllo
+	 * @return A seconda dell'Attribute passato al metodo, r
+	 * estituisce il risultato di {@link Data#computePrototype(Set, ContinuousAttribute)} o {@link #computePrototype(Set, DiscreteAttribute)}
+	 */
 	Object computePrototype(Set<Integer> idList, Attribute attribute)
 	{
 		if(attribute instanceof DiscreteAttribute) return computePrototype(idList, (DiscreteAttribute) attribute);
 		else return computePrototype(idList, (ContinuousAttribute) attribute);
 	}
 	
-	/*  Determina il valore prototipo come media dei valori osservati per attribute nelle transazioni di data
-	 *  aventi indice di riga in idList
+	/**
+	 * Determina il valore prototipo come media dei valori osservati per attribute nelle transazioni di data aventi indice di riga in idList.
+	 * 
+	 * @param idList Insieme di interi contenenti degli indici di riga degli Example di {@link #data}
+	 * @param attribute Attribute sul quale calcolare la media
+	 * 
+	 * @return Media tra i valori degli Example i cui indici sono contenuti in idList dell'attributo attribute presenti in {@link #data}
 	 */
 	private double computePrototype(Set<Integer> idList, ContinuousAttribute attribute)
 	{
@@ -177,6 +253,14 @@ public class Data
 		return media/count;
 	}
 	
+	/**
+	 * Determina il valore dell'attributo attribute presente con maggior frequenza.
+	 * 
+	 * @param idList Insieme di interi contenenti degli indici di riga degli Example di {@link #data}
+	 * @param attribute Attribute sul quale effettuare l'ispezione
+	 * 
+	 * @return Restituisce il valore presente con maggior frequenza dell'attributo Attribute.
+	 */
 	private String computePrototype(Set<Integer> idList, DiscreteAttribute attribute)
 	{
 		int maxFrequency = -1;
@@ -195,4 +279,20 @@ public class Data
 		}
 		return maxFrequencyAttribute.toString();
 	}
+	
+	public String toString()
+    {
+        String dataString = new String();
+        for(Attribute a : explanatorySet) dataString+=a.toString()+" ";
+        dataString+="\n";
+        int i=0;
+        for(Example ex: data)
+        {
+            dataString+=(i+1)+": ";
+            dataString+=ex.toString();
+            dataString+="\n";
+            i++;
+        }
+        return dataString;
+    }
 }

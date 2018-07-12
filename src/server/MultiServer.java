@@ -16,7 +16,7 @@ import java.net.Socket;
  * 
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html">ServerSocket</a>
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/net/Socket.html">Socket</a>
- * @See a href="https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html#accept()">ServerSocket.accept()</a>
+ * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html#accept()">ServerSocket.accept()</a>
  * @see ServerOneClient
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html">Thread</a>
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html">IOException</a>
@@ -50,7 +50,7 @@ class MultiServer
 	 * 
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html">ServerSocket</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/net/Socket.html">Socket</a>
-	 * @See a href="https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html#accept()">ServerSocket.accept()</a>
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/net/ServerSocket.html#accept()">ServerSocket.accept()</a>
 	 * @see ServerOneClient
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html">Thread</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html">IOException</a>

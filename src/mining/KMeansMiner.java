@@ -27,7 +27,7 @@ import data.OutOfRangeSampleSize;
 public class KMeansMiner implements Serializable
 {
 	/**
-	 * Insieme di cluster. Frutto del risultato dell'algoritmo applicato sui dati letti da database o frutto del caricamento da file.
+	 * Insieme di cluster. Frutto del risultato dell'algoritmo applicato sui dati letti da database o del caricamento da file.
 	 * 
 	 * @see Cluster
 	 */
@@ -43,17 +43,22 @@ public class KMeansMiner implements Serializable
 		C = new ClusterSet(k);
 	}
 	
-	/*verificare*/
 	/**
 	 * Crea un {@link java.io.ObjectInputStream} per effettuare la lettura da file.
 	 * Avvalora C con l'oggetto letto da file.
 	 * Chiude lo stream.
 	 * 
 	 * @param fileName nome del file che si intende leggere
-	 * DA COMPLETARE
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws ClassNotFoundException
+	 * 
+	 * @throws FileNotFoundException sollevata quando il file identificato da fileName non esiste sul disco. 
+	 * @throws IOException sollevata quando si verificano errori durante la lettura di C da file
+	 * @throws ClassNotFoundException sollevata quando si effettua il cast ad un tipo non risolvibile
+	 * 
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html">ObjectInputStream</a>
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html">FileNotFoundException</a>
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html">IOException</a>
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html">ClassNotFoundException</a>
+	 * 
 	 */
 	public KMeansMiner(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
@@ -62,6 +67,20 @@ public class KMeansMiner implements Serializable
 		in.close();
 	}
 	
+	/**
+	 * Crea un {@link java.io.ObjectOutputStream} per effettuare la scrittura su file e serializza l'oggetto {@link #C}.
+	 * Chiude lo stream di output.
+	 * 
+	 * @param fileName nome del file sul quale si intende serializzare {@link #C}
+	 * 
+	 * @throws FileNotFoundException sollevata quando non è possibile accedere al file identificato da fileName.
+	 * @throws IOException sollevata quando si verificano errori durante la scrittura di {@link #C} su file.
+	 * 
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html">ObjectOutputStream</a>
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html">FileNotFoundException</a>
+	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html">IOException</a>
+	 * 
+	 */
 	public void salva(String fileName) throws FileNotFoundException, IOException
 	{
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
@@ -69,11 +88,29 @@ public class KMeansMiner implements Serializable
 		out.close();
 	}
 	
+	/**
+	 * Restituisce il ClusterSet {@link #C}.
+	 * @return ClusterSet {@link #C}
+	 */
 	public ClusterSet getC()
 	{
 		return C;
 	}
 	
+	/**
+	 * 
+	 * Il metodo esegue l'algoritmo k-means esegueno i seguenti passi:<br>
+	 * 1. Scelta casuale di centroidi per k clusters assegnandoli al ClusterSet.<br>
+	 * 2. Assegnazione di ciascuna riga in data al cluster avente centroide più vicino all'esempio (utilizzando {@link ClusterSet#updateCentroids(Data)}<br>
+	 * 3. Calcolo dei nuovi centroidi per ciascun Cluster (utilizzando il metodo {@link ClusterSet#updateCentroids(Data)}<br>
+	 * 4. Ripete i passi 2 e 3 finchè due iterazioni consecutive non restituiscono centroidi uguali.
+	 * 
+	 * @param data dati sui quali applicare l'algoritmo KMeans
+	 * @return numero di iterazioni effettuate fino al completamento dell'algoritmo
+	 * @throws OutOfRangeSampleSize sollevata nel caso in cui il numero di k Cluster da scoprire risulta essere maggiore delle
+	 * tuple presenti in {@link data.Data} oppure se tale numero è 0.
+	 * 
+	 */
 	public int kmeans(Data data) throws OutOfRangeSampleSize
 	{
 		int numberOfIterations=0;

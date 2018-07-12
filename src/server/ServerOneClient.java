@@ -20,17 +20,16 @@ import mining.KMeansMiner;
  * Thread che serve un singolo client. Si serve di un Socket per ottenere gli InputStream e OutputStream
  * necessari per la comunicazione col client.
  * Una volta collegati gestisce le richieste inviategli dal client e risponde di conseguenza.
- * In base alle richieste del client si può:
- * <li>prelevare dati dal database ed eseguire l'algoritmo KMeans, fornendo i risultati al client</li> 
- * <li>salva il risultato dell'elaborazione del KMeans in un file</li>
- * <li>prelevare un ClusterSet (già costruito in precedenza) da file, specificando il nome dello stesso</li>
+ * In base alle richieste del client si può:<br>
+ * - Prelevare dati dal database ed eseguire l'algoritmo KMeans, fornendo i risultati al client 
+ * - Salva il risultato dell'elaborazione del KMeans in un file
+ * - Prelevare un ClusterSet (già costruito in precedenza) da file, specificando il nome dello stesso
  * 
  * @author de Gennaro Gaetano, Farinola Francesco
  * 
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html">InputStream</a>
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html">OutputStream</a>
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html">Thread</a>
- * @see ClusterSet
  *
  */
 class ServerOneClient extends Thread
@@ -73,12 +72,12 @@ class ServerOneClient extends Thread
 	}
 	
 	/**
-	 * @override del metodo run() della classe Thread.
+	 * Override del metodo run() della classe Thread.
 	 * Una volta collegati gestisce le richieste inviategli dal client e risponde di conseguenza.
-	 * In base alle richieste del client:
-	 * <li>preleva dati dal database ed eseguire l'algoritmo KMeans, fornendo i risultati al client</li>
-	 * <li>salva il risultato dell'elaborazione del KMeans in un file</li> 
-	 * <li>preleva un ClusterSet (già costruito in precedenza) da file, specificando il nome dello stesso</li>
+	 * In base alle richieste del client:<br>
+	 * - Preleva dati dal database ed eseguire l'algoritmo KMeans, fornendo i risultati al client<br>
+	 * - Salva il risultato dell'elaborazione del KMeans in un file<br> 
+	 * - Preleva un ClusterSet (già costruito in precedenza) da file, specificando il nome dello stesso<br>
 	 * 
 	 */
 	public void run() 

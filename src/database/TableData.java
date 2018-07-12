@@ -12,19 +12,40 @@ import java.util.TreeSet;
 
 import database.TableSchema.Column;
 
-
-public class TableData {
-
+/**
+ * Preleva da un database le tuple modellate mediante l'oggetto Example.
+ * Utilizza un oggetto DBAccess per stabilire la connessione al database e interrogare
+ * la tabella di nome table.
+ * 
+ * @author de Gennaro Gaetano, Farinola Francesco
+ *
+ */
+public class TableData
+{
+	/**
+	 * Oggetto che modella una connessione al database.
+	 * @see DbAccess
+	 */
 	DbAccess db;
 
 	
-	
+	/**
+	 * Inizializza {@link #db} con l'oggetto passato per paramtro.
+	 * @param db istanza di classe {@link DbAccess}
+	 */
 	public TableData(DbAccess db)
 	{
-		
 		this.db=db;
 	}
 
+	/**
+	 * Legge da database tutte le tuple distinte presenti in table.
+	 * 
+	 * @param table Nome della tabella dalla quale prelevare le tuple
+	 * @return Lista di Example rappresentanti le tuple di una tabella
+	 * @throws SQLException sollevata nel caso in cui la connessione al database fallisce
+	 * @throws EmptySetException sollevata nel caso in cui la tabella dalla quale si intende leggere le tuple è vuota
+	 */
 	public List<Example> getDistinctTransazioni(String table) throws SQLException, EmptySetException
 	{
 		TableSchema schema = new TableSchema(db, table);
@@ -50,7 +71,14 @@ public class TableData {
 		return examples;
 	}
 
-	
+	/**
+	 * Restituisce l'insieme dei valori distinti assunti dalla colonna specificata
+	 * 
+	 * @param table Nome della tabella dalla quale prelevare i valori
+	 * @param column Colonna il cui insieme associato di valori deve essere restituito
+	 * @return Insieme dei valori distinti assunti dalla colonna specificata
+	 * @throws SQLException sollevata nel caso in cui la connessione al database fallisce
+	 */
 	public Set<Object> getDistinctColumnValues(String table,Column column) throws SQLException
 	{
 		Statement s = db.getConnection().createStatement();
@@ -66,7 +94,17 @@ public class TableData {
 		return columnValues;
 	}
 
-	public  Object getAggregateColumnValue(String table,Column column,QUERY_TYPE aggregate) throws SQLException,NoValueException
+	/**
+	 * Restituisce il risultato di una funzione di aggregazione eseguita dal DBMS.
+	 * 
+	 * @param table Nome della tabella sulla quale impartire la funzione di aggregazione.
+	 * @param column Colonna sulla quale impartire la funzione di aggregazione.
+	 * @param aggregate Tipo della funzione di aggregazione.
+	 * @return Object Contenente il risultato della funzione di aggregazione.
+	 * @throws SQLException Se la connessione al database fallisce.
+	 * @throws NoValueException Sollevata se la funzione di aggregazione non produce alcun risultato a causa di mancanza di tuple nel database.
+	 */
+	public Object getAggregateColumnValue(String table,Column column,QUERY_TYPE aggregate) throws SQLException,NoValueException
 	{
 		Statement s = db.getConnection().createStatement();
 		ResultSet rs = s.executeQuery("SELECT "+aggregate+"("+column.getColumnName()+") FROM "+table);
