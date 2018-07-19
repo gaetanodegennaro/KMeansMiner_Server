@@ -6,8 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import data.Data;
 import data.OutOfRangeSampleSize;
@@ -118,7 +116,6 @@ class ServerOneClient extends Thread
 							this.out.writeObject("OK");
 							this.out.writeObject(numIter);
 							this.out.writeObject(kmeans.getC().toString(data));
-
 						}
 						catch(OutOfRangeSampleSize ex) {out.writeObject(ex.getMessage());}
 					}

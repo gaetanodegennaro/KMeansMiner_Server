@@ -1,4 +1,5 @@
 package data;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -250,7 +251,9 @@ public class Data
 			}
 			i++;
 		}
-		return media/count;
+		BigDecimal bd = new BigDecimal(Double.toString(media/count));
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
 	}
 	
 	/**

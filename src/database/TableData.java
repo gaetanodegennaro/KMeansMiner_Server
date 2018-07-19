@@ -104,7 +104,7 @@ public class TableData
 	 * @throws SQLException Se la connessione al database fallisce.
 	 * @throws NoValueException Sollevata se la funzione di aggregazione non produce alcun risultato a causa di mancanza di tuple nel database.
 	 */
-	public Object getAggregateColumnValue(String table,Column column,QUERY_TYPE aggregate) throws SQLException,NoValueException
+	public Object getAggregateColumnValue(String table,Column column,QUERY_TYPE aggregate) throws SQLException, NoValueException
 	{
 		Statement s = db.getConnection().createStatement();
 		ResultSet rs = s.executeQuery("SELECT "+aggregate+"("+column.getColumnName()+") FROM "+table);

@@ -86,7 +86,7 @@ class MultiServer
 	}
 	
 	public static void main(String args[])
-	{
+	{ 
 		new MultiServer(8080);
 	}
 }

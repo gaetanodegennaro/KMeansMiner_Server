@@ -10,6 +10,12 @@ package keyboardInput;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Classe utilizzata per gestire l'I/O da tastiera su terminale.
+ * 
+ * @author de Gennaro Gaetano, Farinola Francesco
+ *
+ */
 public class Keyboard
 {
 	// ************* Error Handling Section **************************

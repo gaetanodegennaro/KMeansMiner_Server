@@ -1,6 +1,7 @@
 package data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Modella una sequenza di {@link Item}.
@@ -80,7 +81,9 @@ public class Tuple implements Serializable
 		{
 			distance+=tuple[i].distance(obj.get(i));
 		}
-		return distance;
+		BigDecimal bd = new BigDecimal(Double.toString(distance));
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
 	}
 	
 	/**
@@ -104,8 +107,9 @@ public class Tuple implements Serializable
 			sumD+=d;
 		}
 		p=sumD/clusteredData.length;
-		
-		return p;
+		BigDecimal bd = new BigDecimal(Double.toString(p));
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
 	}
 	
 	public String toString()
